@@ -1,0 +1,22 @@
+body {
+  background: url(./img/background.png);
+  background-size: cover;
+}
+
+button {
+  cursor: grab;
+}
+
+.paint {
+  padding-top: 20%;
+}
+
+.top,
+.replay {
+  display: flex;
+  justify-content: center;
+}
+
+.replay {
+    visibility: hidden;
+}
