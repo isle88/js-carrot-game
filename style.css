@@ -1,22 +1,87 @@
-body {
-  background: url(./img/background.png);
-  background-size: cover;
-}
-
 button {
-  cursor: grab;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 
-.paint {
-  padding-top: 20%;
+body {
+  text-align: center;
 }
 
-.top,
-.replay {
+.game {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  width: 800px;
+  height: 500px;
+  margin: auto;
+  background: url(./img/background.png) center/cover;
+  border-radius: 20px;
 }
 
-.replay {
-    visibility: hidden;
+.game__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
+.game__button {
+  padding: 0, 10px;
+  border-radius: 20px;
+  transition: transform 300ms ease-in;
+  border: 2px solid black;
+}
+
+.game__button:hover {
+  transform: scale(1.2);
+}
+
+.game__timer {
+  font-size: 32px;
+  margin-top: 4px;
+}
+
+.game__counter {
+  text-align: center;
+  width: 42px;
+  height: 42px;
+  font-size: 30px;
+  border-radius: 50%;
+  border: 2px solid black;
+  background-color: burlywood;
+  color: white;
+  margin-top: 4px;
+}
+
+.game__field {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin-top: 40px;
+}
+
+.pop-up {
+  width: 400px;
+  height: 150px;
+  margin: auto;
+  padding: 20px;
+  background-color: #00000090;
+  color: white;
+  text-align: center;
+  transform: translateY(-120%);
+  border-radius: 20px;
+}
+
+.pop-up--hide {
+  display: none;
+}
+
+.pop-up__button {
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.pop-up__message {
+  display: block;
+  font-size: 30px;
 }
