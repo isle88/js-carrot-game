@@ -2,11 +2,12 @@
 
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
-const BUG_COUNT = 5
-const POP_UP_HIDE ="pop-up--hide"
+const BUG_COUNT = 5;
+const POP_UP_HIDE = "pop-up--hide";
 
 const gameBtn = document.querySelector(".game__button");
-const counter = document.querySelector(".game__counter");
+const gameCounter = document.querySelector(".game__counter");
+const gameTimer = document.querySelector(".game__timer");
 const gameField = document.querySelector(".game__field");
 const fieldRect = gameField.getBoundingClientRect();
 const popUp = document.querySelector(".pop-up");
@@ -14,34 +15,45 @@ const popUpBtn = document.querySelector(".pop-up__button");
 const popUpMsg = document.querySelector(".pop-up__message");
 
 let started = false;
-let carrotCount = 0;
+let carrotCounter = 0;
 let timer = undefined;
 
-function onPlay(event) {
-  // change Btn state
-  controlGame(event);
-
-  // countdown
-
-  // add carrots and bugs
+function initGame() {
+  gameField.innerHTML = "";
+  gameCounter.innerHTML = CARROT_COUNT;
   addItem("carrot", CARROT_COUNT, "img/carrot.png");
-  addItem("bug",BUG_COUNT, "img/bug.png");
+  addItem("bug", BUG_COUNT, "img/bug.png");
 }
 
-function controlGame(event) {
-  event.preventDefault();
-  if (event.target.className === "play") {
-    gameBtn.innerHTML = `
-    <img class="stop" src="https://img.icons8.com/fluency/48/000000/stop.png"/>`;
+function controlGame() {
+  if (started) {
+    stopGame();
   } else {
-    gameBtn.innerHTML = `
-    <img
-    class="play"
-    src="https://img.icons8.com/fluency/48/000000/play.png"
-  />`;
-    popUp.classList.remove(POP_UP_HIDE);
+    startGame();
   }
+  started = !started;
 }
+
+function startGame() {
+  initGame();
+  gameBtn.innerHTML = `
+  <img src="https://img.icons8.com/fluency/48/000000/stop.png"/>`;
+  showTimeAndCounter();
+  showGameTimer();
+}
+
+function stopGame() {
+  gameBtn.innerHTML = `
+  <img src="https://img.icons8.com/fluency/48/000000/play.png"
+/>`;
+}
+
+function showTimeAndCounter() {
+  gameTimer.style.visibility = "visible";
+  gameCounter.style.visibility = "visible";
+}
+
+function showGameTimer() {}
 
 function addItem(className, count, imgPath) {
   const x1 = 0;
@@ -59,8 +71,8 @@ function addItem(className, count, imgPath) {
     item.style.left = `${x}px`;
     item.style.top = `${y}px`;
     gameField.appendChild(item);
-    carrotCount = count
-    counter.innerHTML = carrotCount;
+    carrotCounter = count;
+    gameCounter.innerHTML = carrotCounter;
   }
 
   function randomNumber(min, max) {
@@ -71,10 +83,9 @@ function addItem(className, count, imgPath) {
 function removeCarrot(event) {
   if (event.target.className === "carrot") {
     event.target.remove();
-    console.log(carrotCount)
-    carrotCount--;
-    counter.innerText = carrotCount
-    if (carrotCount === 0) {
+    carrotCounter--;
+    gameCounter.innerText = carrotCounter;
+    if (carrotCounter === 0) {
       popUpMsg.innerHTML = "Restart!";
       popUp.classList.remove(POP_UP_HIDE);
     }
@@ -83,8 +94,8 @@ function removeCarrot(event) {
     popUpMsg.innerText = "Failed";
   }
 }
-gameBtn.addEventListener("click", onPlay);
+gameBtn.addEventListener("click", controlGame);
 document.addEventListener("click", removeCarrot);
 popUpBtn.addEventListener("click", () => {
-  document.location.reload()
+  document.location.reload();
 });
