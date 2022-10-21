@@ -1,64 +1,90 @@
-const playButton = document.querySelector(".play_button");
-const counter = document.querySelector(".counter");
-const paint = document.querySelector(".paint");
-const replay = document.querySelector(".replay");
-const replayButton = document.querySelector(".replay_button");
+"use strict";
 
-let carrots = Math.floor(Math.random() * 20);
+const CARROT_SIZE = 80;
+const CARROT_COUNT = 5;
+const BUG_COUNT = 5
+const POP_UP_HIDE ="pop-up--hide"
 
-function onplay(event) {
-  // change button state
-  changeButton(event);
+const gameBtn = document.querySelector(".game__button");
+const counter = document.querySelector(".game__counter");
+const gameField = document.querySelector(".game__field");
+const fieldRect = gameField.getBoundingClientRect();
+const popUp = document.querySelector(".pop-up");
+const popUpBtn = document.querySelector(".pop-up__button");
+const popUpMsg = document.querySelector(".pop-up__message");
+
+let started = false;
+let carrotCount = 0;
+let timer = undefined;
+
+function onPlay(event) {
+  // change Btn state
+  controlGame(event);
 
   // countdown
 
-  // show carrots and bugs
-  paintNow();
+  // add carrots and bugs
+  addItem("carrot", CARROT_COUNT, "img/carrot.png");
+  addItem("bug",BUG_COUNT, "img/bug.png");
 }
 
-function changeButton(event) {
-  //   event.preventDefault();
+function controlGame(event) {
+  event.preventDefault();
   if (event.target.className === "play") {
-    playButton.innerHTML = `
+    gameBtn.innerHTML = `
     <img class="stop" src="https://img.icons8.com/fluency/48/000000/stop.png"/>`;
   } else {
-    playButton.innerHTML = `
+    gameBtn.innerHTML = `
     <img
     class="play"
     src="https://img.icons8.com/fluency/48/000000/play.png"
   />`;
-  replay.style.visibility = "visible";
+    popUp.classList.remove(POP_UP_HIDE);
   }
 }
 
-function paintNow() {
-  let carrotNBug = "";
+function addItem(className, count, imgPath) {
+  const x1 = 0;
+  const y1 = 0;
+  const x2 = fieldRect.width - CARROT_SIZE;
+  const y2 = fieldRect.height - CARROT_SIZE;
 
-  counter.innerText = carrots;
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement("img");
+    item.setAttribute("class", className);
+    item.setAttribute("src", imgPath);
+    item.style.position = "absolute";
+    const x = randomNumber(x1, x2);
+    const y = randomNumber(y1, y2);
+    item.style.left = `${x}px`;
+    item.style.top = `${y}px`;
+    gameField.appendChild(item);
+    carrotCount = count
+    counter.innerHTML = carrotCount;
+  }
 
-  for (let i = 0; i < carrots; i++) {
-    carrotNBug += `
-    <img src="./img/bug.png" alt="bug" />
-    <img src="./img/carrot.png" alt="carrot" />`;
-    paint.innerHTML = `${carrotNBug}`;
+  function randomNumber(min, max) {
+    return Math.random() * (max - min) + min;
   }
 }
 
 function removeCarrot(event) {
-  if (event.target.alt === "carrot") {
+  if (event.target.className === "carrot") {
     event.target.remove();
-    carrots--;
-    counter.innerHTML = carrots;
-    if (carrots === 0) {
-      replay.style.visibility = "visible";
+    console.log(carrotCount)
+    carrotCount--;
+    counter.innerText = carrotCount
+    if (carrotCount === 0) {
+      popUpMsg.innerHTML = "Restart!";
+      popUp.classList.remove(POP_UP_HIDE);
     }
+  } else if (event.target.className === "bug") {
+    popUp.classList.remove(POP_UP_HIDE);
+    popUpMsg.innerText = "Failed";
   }
 }
-playButton.addEventListener("click", onPlay);
+gameBtn.addEventListener("click", onPlay);
 document.addEventListener("click", removeCarrot);
-replayButton.addEventListener("click", () => {
-  // game restart
-  onplay();
-  // hide replay window
-  replay.style.visibility = "hidden";
+popUpBtn.addEventListener("click", () => {
+  document.location.reload()
 });

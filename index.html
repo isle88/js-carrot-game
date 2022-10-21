@@ -5,33 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carrot Game</title>
+    <link rel="stylesheet" href="style.css" />
     <script src="main.js" defer></script>
   </head>
   <body>
-    <div class="top">
-      <button class="play_button">
-        <img
-          class="play"
-          src="https://img.icons8.com/fluency/48/000000/play.png"
-        />
-      </button>
-      <div class="timer">00:00</div>
-      <div class="counter">0</div>
-    </div>
+    <section class="game">
+      <header class="game__header">
+        <button class="game__button">
+          <img
+            class="play"
+            src="https://img.icons8.com/fluency/48/000000/play.png"
+          />
+        </button>
+        <span class="game__timer">00:00</span>
+        <span class="game__counter"></span>
+      </header>
+      <section class="game__field"></section>
+    </section>
 
-    <div class="paint">
-      <!-- <img src="./img/carrot.png" alt="carrot"/>
-      <img src="./img/bug.png" alt="bug" /> -->
-    </div>
-
-    <div class="replay">
-      <button class="replay_button">
-        <img
-          src="https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/64/000000/external-Refresh-user-interface-febrian-hidayat-flat-febrian-hidayat.png"
-        />
+    <section class="pop-up pop-up--hide">
+      <button class="pop-up__button">
+        <img src="https://img.icons8.com/fluency/48/000000/redo.png" />
       </button>
-      <h1>Replay ?</h1>
-    </div>
-    <link rel="stylesheet" href="style.css" />
+      <span class="pop-up__message">Replay ?</span>
+    </section>
   </body>
 </html>
