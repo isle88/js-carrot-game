@@ -39,6 +39,7 @@ body {
 .game__timer {
   font-size: 32px;
   margin-top: 4px;
+  visibility: hidden;
 }
 
 .game__counter {
@@ -51,6 +52,7 @@ body {
   background-color: burlywood;
   color: white;
   margin-top: 4px;
+  visibility: hidden;
 }
 
 .game__field {
