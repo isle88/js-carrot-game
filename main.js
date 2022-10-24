@@ -70,8 +70,9 @@ function finishGame(win) {
   } else {
     playSound(failSound);
   }
+  stopGameTimer()
   stopSound(bgSound)
-  showPopUpWithMsg(win ? "Yay :)" : "Try again ?");
+  showPopUpWithMsg(win ? "Yay :)" : "Try again?");
 }
 
 function showPlayBtn() {
@@ -156,7 +157,6 @@ function removeCarrot(event) {
       finishGame(true);
     }
   } else if (target.matches(".bug")) {
-    stopGameTimer();
     finishGame(false);
   }
 }
