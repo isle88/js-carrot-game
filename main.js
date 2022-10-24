@@ -4,6 +4,7 @@ const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const POP_UP_HIDE = "pop-up--hide";
+const GAME_DURATION_SEC = 5;
 
 const gameBtn = document.querySelector(".game__button");
 const gameCounter = document.querySelector(".game__counter");
@@ -14,6 +15,11 @@ const popUp = document.querySelector(".pop-up");
 const popUpBtn = document.querySelector(".pop-up__button");
 const popUpMsg = document.querySelector(".pop-up__message");
 
+const carrotSound = new Audio("./sound/carrot_pull.mp3");
+const alertSound = new Audio("./sound/alert.wav");
+const bgSound = new Audio("./sound/bg.mp3");
+const winSound = new Audio("./sound/game_win.mp3");
+const failSound = new Audio("./sound/bug_pull.mp3");
 let started = false;
 let carrotCounter = 0;
 let timer = undefined;
@@ -31,21 +37,50 @@ function controlGame() {
   } else {
     startGame();
   }
-  started = !started;
 }
 
 function startGame() {
+  started = true;
   initGame();
   gameBtn.innerHTML = `
   <img src="https://img.icons8.com/fluency/48/000000/stop.png"/>`;
   showTimeAndCounter();
-  showGameTimer();
+  startGameTimer();
+  showPlayBtn();
+  playSound(bgSound);
 }
 
 function stopGame() {
+  started = false;
   gameBtn.innerHTML = `
   <img src="https://img.icons8.com/fluency/48/000000/play.png"
 />`;
+  stopGameTimer();
+  hidePlayBtn();
+  showPopUpWithMsg("REPLAY?");
+  playSound(alertSound)
+  stopSound(bgSound);
+}
+
+function finishGame(win) {
+  started = false;
+  hidePlayBtn();
+  if (win) {
+    playSound(winSound);
+  } else {
+    playSound(failSound);
+  }
+  stopSound(bgSound)
+  showPopUpWithMsg(win ? "Yay :)" : "Try again ?");
+}
+
+function showPlayBtn() {
+  gameBtn.style.visibility = "visible";
+}
+
+function showPopUpWithMsg(msg) {
+  popUpMsg.innerText = msg;
+  popUp.classList.remove(POP_UP_HIDE);
 }
 
 function showTimeAndCounter() {
@@ -53,7 +88,32 @@ function showTimeAndCounter() {
   gameCounter.style.visibility = "visible";
 }
 
-function showGameTimer() {}
+function startGameTimer() {
+  let remainingTimeSec = GAME_DURATION_SEC;
+  updateTimerText(remainingTimeSec);
+  timer = setInterval(() => {
+    if (remainingTimeSec <= 0) {
+      stopGameTimer();
+      finishGame(carrotCounter === 0);
+      return;
+    }
+    updateTimerText(--remainingTimeSec);
+  }, 1000);
+}
+
+function stopGameTimer() {
+  clearInterval(timer);
+}
+
+function updateTimerText(time) {
+  const mins = Math.floor(time / 60);
+  const secs = time % 60;
+  gameTimer.innerText = `${mins}:${secs}`;
+}
+
+function hidePlayBtn() {
+  gameBtn.style.visibility = "hidden";
+}
 
 function addItem(className, count, imgPath) {
   const x1 = 0;
@@ -81,21 +141,42 @@ function addItem(className, count, imgPath) {
 }
 
 function removeCarrot(event) {
-  if (event.target.className === "carrot") {
+  if (!started) {
+    return;
+  }
+  const target = event.target;
+  if (target.matches(".carrot")) {
     event.target.remove();
     carrotCounter--;
+    playSound(carrotSound);
     gameCounter.innerText = carrotCounter;
+
     if (carrotCounter === 0) {
-      popUpMsg.innerHTML = "Restart!";
-      popUp.classList.remove(POP_UP_HIDE);
+      stopGame();
+      finishGame(true);
     }
-  } else if (event.target.className === "bug") {
-    popUp.classList.remove(POP_UP_HIDE);
-    popUpMsg.innerText = "Failed";
+  } else if (target.matches(".bug")) {
+    stopGameTimer();
+    finishGame(false);
   }
 }
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
+function stopSound(sound) {
+  sound.pause();
+}
+
+function hidePopUp() {
+  popUp.classList.add(POP_UP_HIDE);
+}
+
 gameBtn.addEventListener("click", controlGame);
-document.addEventListener("click", removeCarrot);
+gameField.addEventListener("click", removeCarrot);
 popUpBtn.addEventListener("click", () => {
-  document.location.reload();
+  startGame();
+  hidePopUp();
 });
