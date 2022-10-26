@@ -6,6 +6,7 @@ button {
 
 body {
   text-align: center;
+  background-color: black;
 }
 
 .game {
@@ -40,6 +41,8 @@ body {
   font-size: 32px;
   margin-top: 4px;
   visibility: hidden;
+  user-select: none;
+  cursor: auto;
 }
 
 .game__counter {
@@ -53,6 +56,8 @@ body {
   color: white;
   margin-top: 4px;
   visibility: hidden;
+  user-select: none;
+  cursor: auto;
 }
 
 .game__field {
@@ -86,4 +91,12 @@ body {
 .pop-up__message {
   display: block;
   font-size: 30px;
+}
+
+.carrot:hover, .bug:hover {
+  transition: transform 100ms ease-in;
+}
+
+.carrot:hover, .bug:hover {
+  transform: scale(1.1);
 }
