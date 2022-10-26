@@ -1,10 +1,10 @@
 "use strict";
 
 const CARROT_SIZE = 80;
-const CARROT_COUNT = 5;
-const BUG_COUNT = 5;
+const CARROT_COUNT = 10;
+const BUG_COUNT = 10;
 const POP_UP_HIDE = "pop-up--hide";
-const GAME_DURATION_SEC = 5;
+const GAME_DURATION_SEC = 60;
 
 const gameBtn = document.querySelector(".game__button");
 const gameCounter = document.querySelector(".game__counter");
