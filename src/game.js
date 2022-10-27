@@ -77,6 +77,7 @@ class Game {
         <img src="https://img.icons8.com/fluency/48/000000/play.png"
       />`;
     this.onGameStop && this.onGameStop(reason);
+    this.gameField.hideField();
   }
 
   onItemClick = (item) => {
@@ -88,8 +89,7 @@ class Game {
         this.stop(Reason.win);
       }
     } else if (item === ItemType.bug) {
-      this.gameField.hideField();
-      this.stop(Reason.lose);
+        this.stop(Reason.lose);
     }
   };
 
