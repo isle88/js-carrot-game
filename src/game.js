@@ -80,9 +80,6 @@ class Game {
   }
 
   onItemClick = (item) => {
-    if (!this.started) {
-      return;
-    }
     if (item === ItemType.carrot) {
       this.counter++;
       this.updateCounterBoard();
