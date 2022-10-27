@@ -62,6 +62,7 @@ function startGame() {
   startGameTimer();
   showPlayBtn();
   sound.playBg();
+  carrotCounter = CARROT_COUNT
 }
 
 function stopGame() {
