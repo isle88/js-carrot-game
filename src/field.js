@@ -13,6 +13,7 @@ export default class Field {
   }
 
   init() {
+    this.showField()
     this.field.innerHTML = "";
     this._addItem("carrot", this.carrotCount, "img/carrot.png");
     this._addItem("bug", this.bugCount, "img/bug.png");
@@ -51,6 +52,14 @@ export default class Field {
       this.onItemClick && this.onItemClick("bug");
     }
   };
+
+  hideField() {
+    this.field.style.visibility = "hidden";
+  }
+
+  showField() {
+    this.field.style.visibility = "visible"
+  }
 }
 
 function randomNumber(min, max) {
