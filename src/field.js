@@ -38,23 +38,19 @@ export default class Field {
       item.style.left = `${x}px`;
       item.style.top = `${y}px`;
       this.field.appendChild(item);
-      // this.carrotCounter = count
-      //   gameCounter.innerHTML = carrotCounter;
     }
   }
 
-  onClick(event) {
+  onClick = (event) => {
     const target = event.target;
     if (target.matches(".carrot")) {
       target.remove();
-      // carrotCounter--;
       sound.playCarrot();
       this.onItemClick && this.onItemClick("carrot");
     } else if (target.matches(".bug")) {
-      sound.playFail();
       this.onItemClick && this.onItemClick("bug");
     }
-  }
+  };
 }
 
 function randomNumber(min, max) {
