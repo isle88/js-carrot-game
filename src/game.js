@@ -3,7 +3,28 @@
 import * as sound from "./sound.js";
 import Field from "./field.js";
 
-export default class Game {
+// Builder Pattern
+export default class GameBuilder {
+  withCarrotCount(num) {
+    this.carrotCount = num;
+    return this;
+  }
+
+  withBugCount(num) {
+    this.bugCount = num;
+    return this;
+  }
+
+  withGameDuration(duration) {
+    this.gameDuration = duration;
+    return this;
+  }
+  build() {
+    return new Game(this.carrotCount, this.bugCount, this.gameDuration);
+  }
+}
+
+class Game {
   constructor(carrotCount, bugCount, gameDuration) {
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
@@ -66,6 +87,7 @@ export default class Game {
         this.finish(true);
       }
     } else if (item === "bug") {
+      this.gameField.hideField()
       this.finish(false);
     }
   };
