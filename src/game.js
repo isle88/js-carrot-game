@@ -1,7 +1,7 @@
 "use strict";
 
 import * as sound from "./sound.js";
-import Field from "./field.js";
+import { Field, ItemType } from "./field.js";
 
 export const Reason = Object.freeze({
   win: "win",
@@ -47,13 +47,12 @@ class Game {
 
     this.gameCounter = document.querySelector(".game__counter");
     this.gameTimer = document.querySelector(".game__timer");
-
-    this.gameField = new Field(carrotCount, bugCount);
-    this.gameField.setClickLister(this.onItemClick);
-
     this.started = false;
     this.counter = 0;
     this.timer = undefined;
+
+    this.gameField = new Field(carrotCount, bugCount);
+    this.gameField.setClickLister(this.onItemClick);
   }
   setGameStopListener(onGameStop) {
     this.onGameStop = onGameStop;
@@ -84,14 +83,14 @@ class Game {
     if (!this.started) {
       return;
     }
-    if (item === "carrot") {
+    if (item === ItemType.carrot) {
       this.counter++;
       this.updateCounterBoard();
 
       if (this.counter === this.carrotCount) {
         this.stop(Reason.win);
       }
-    } else if (item === "bug") {
+    } else if (item === ItemType.bug) {
       this.gameField.hideField();
       this.stop(Reason.lose);
     }
