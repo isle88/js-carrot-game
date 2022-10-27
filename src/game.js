@@ -3,8 +3,14 @@
 import * as sound from "./sound.js";
 import Field from "./field.js";
 
+export const Reason = Object.freeze({
+  win: "win",
+  lose: "lose",
+  cancel: "cancel",
+});
+
 // Builder Pattern
-export default class GameBuilder {
+export class GameBuilder {
   withCarrotCount(num) {
     this.carrotCount = num;
     return this;
@@ -33,7 +39,7 @@ class Game {
     this.gameBtn = document.querySelector(".game__button");
     this.gameBtn.addEventListener("click", () => {
       if (this.started) {
-        this.stop();
+        this.stop(Reason.cancel);
       } else {
         this.start();
       }
@@ -63,16 +69,15 @@ class Game {
     sound.playBg();
   }
 
-  stop() {
+  stop(reason) {
     this.started = false;
-    this.gameBtn.innerHTML = `
-      <img src="https://img.icons8.com/fluency/48/000000/play.png"
-    />`;
     this.stopGameTimer();
     this.hidePlayBtn();
-    sound.playAlert();
     sound.stopBg();
-    this.onGameStop && this.onGameStop("cancel");
+    this.gameBtn.innerHTML = `
+        <img src="https://img.icons8.com/fluency/48/000000/play.png"
+      />`;
+    this.onGameStop && this.onGameStop(reason);
   }
 
   onItemClick = (item) => {
@@ -84,26 +89,13 @@ class Game {
       this.updateCounterBoard();
 
       if (this.counter === this.carrotCount) {
-        this.finish(true);
+        this.stop(Reason.win);
       }
     } else if (item === "bug") {
-      this.gameField.hideField()
-      this.finish(false);
+      this.gameField.hideField();
+      this.stop(Reason.lose);
     }
   };
-
-  finish(win) {
-    this.started = false;
-    this.hidePlayBtn();
-    if (win) {
-      sound.playWin();
-    } else {
-      sound.playFail();
-    }
-    this.stopGameTimer();
-    sound.stopBg();
-    this.onGameStop && this.onGameStop(win ? "win" : "lose");
-  }
 
   showPlayBtn() {
     this.gameBtn.style.visibility = "visible";
@@ -124,7 +116,7 @@ class Game {
     this.timer = setInterval(() => {
       if (remainingTimeSec <= 0) {
         clearInterval(this.timer);
-        this.finish(this.carrotCount === this.counter);
+        this.stop(this.carrotCount === this.counter ? Reason.win : Reason.lose);
         return;
       }
       this.updateTimerText(--remainingTimeSec);
@@ -136,8 +128,11 @@ class Game {
   }
 
   updateTimerText(time) {
-    const mins = Math.floor(time / 60);
-    const secs = time % 60;
+    let mins = Math.floor(time / 60);
+    let secs = time % 60;
+
+    if (mins < 10) mins = `0${mins}`;
+    if (secs < 10) secs = `0${secs}`;
     this.gameTimer.innerText = `${mins}:${secs}`;
   }
 
