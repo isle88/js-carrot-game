@@ -1,6 +1,6 @@
 "use strict";
 
-export default class PopUP {
+export default class PopUp {
   constructor() {
     this.popUp = document.querySelector(".pop-up");
     this.popUpMsg = document.querySelector(".pop-up__message");
